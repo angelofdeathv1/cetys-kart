@@ -61,3 +61,5 @@ yarn.lock
 .DS_STORE
 
 .java-version
+
+src/exposed/MSSQLConfig.kt
