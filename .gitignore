@@ -42,7 +42,6 @@ hs_err_pid*
 # End of https://www.gitignore.io/api/java
 
 */out/
-out/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
