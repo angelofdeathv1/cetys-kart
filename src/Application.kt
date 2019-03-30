@@ -16,7 +16,7 @@ import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
-import mx.cetys.arambula.angel.exposed.callBuscarAlumnoSP
+import mx.cetys.arambula.angel.impl.AlumnoApi
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -24,6 +24,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     val apiRoot = "/api/micampus"
+    val alumnoApi = AlumnoApi()
 
     install(Authentication) {
     }
@@ -65,8 +66,9 @@ fun Application.module(testing: Boolean = false) {
             val matricula = queryParameters["matricula"] ?: ""
             val password = queryParameters["password"] ?: ""
 
-            val alumno = callBuscarAlumnoSP(matricula, password)
-            call.respond(alumno)
+            val response = alumnoApi.getMatricula(matricula, password)
+
+            call.respond(response)
         }
 
     }
