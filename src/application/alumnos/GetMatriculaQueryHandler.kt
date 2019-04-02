@@ -11,7 +11,12 @@ class GetMatriculaQueryHandler : RequestHandler<GetMatriculaQuery, GetMatriculaQ
         require(message.matricula.isNotBlank())
         require(message.contrasena.isNotBlank())
 
-        val alumno = spc.callBuscarAlumnoSP(message.matricula, message.contrasena)
+        var messageA = message.matricula.toUpperCase()
+        when (messageA[0]) {
+            'T', 'M', 'E' -> messageA = messageA.substring(1)
+        }
+
+        val alumno = spc.callBuscarAlumnoSP(messageA, message.contrasena)
 
         return GetMatriculaQueryResponse(alumno)
     }

@@ -12,11 +12,15 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.Parameters
 import io.ktor.jackson.jackson
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
+import io.ktor.routing.post
 import io.ktor.routing.routing
-import mx.cetys.arambula.angel.impl.AlumnoApi
+import mx.cetys.arambula.angel.impl.AddProductRequest
+import mx.cetys.arambula.angel.impl.AlumnoApiImpl
+import mx.cetys.arambula.angel.impl.ProductApiImpl
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -24,7 +28,8 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     val apiRoot = "/api/micampus"
-    val alumnoApi = AlumnoApi()
+    val alumnoApiImpl = AlumnoApiImpl()
+    val productApiImpl = ProductApiImpl()
 
     install(Authentication) {
     }
@@ -66,9 +71,15 @@ fun Application.module(testing: Boolean = false) {
             val matricula = queryParameters["matricula"] ?: ""
             val password = queryParameters["password"] ?: ""
 
-            val response = alumnoApi.getMatricula(matricula, password)
+            val response = alumnoApiImpl.getMatricula(matricula, password)
 
             call.respond(response)
+        }
+
+        post("api/cetyskart/public/v1/products") {
+            val postObject = call.receive<AddProductRequest>()
+
+            call.respond(productApiImpl.addProduct(postObject))
         }
 
     }

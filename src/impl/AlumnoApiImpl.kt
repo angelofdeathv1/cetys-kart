@@ -3,7 +3,7 @@ package mx.cetys.arambula.angel.impl
 import mx.cetys.arambula.angel.application.alumnos.GetMatriculaQuery
 import mx.cetys.arambula.angel.application.alumnos.GetMatriculaQueryHandler
 
-class AlumnoApi {
+class AlumnoApiImpl {
     private val getMatriculaQueryHandler = GetMatriculaQueryHandler()
 
     fun getMatricula(matricula: String, password: String): GetMatriculaResponse {
