@@ -15,9 +15,9 @@ import io.ktor.jackson.jackson
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.routing
+import io.ktor.routing.*
+import mx.cetys.arambula.angel.application.alumnos.GetMatriculaQueryHandler
+import mx.cetys.arambula.angel.exposed.StoredProceduresCallsImpl
 import mx.cetys.arambula.angel.impl.AddProductRequest
 import mx.cetys.arambula.angel.impl.AlumnoApiImpl
 import mx.cetys.arambula.angel.impl.ProductApiImpl
@@ -28,7 +28,7 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     val apiRoot = "/api/micampus"
-    val alumnoApiImpl = AlumnoApiImpl()
+    val alumnoApiImpl = AlumnoApiImpl(GetMatriculaQueryHandler(StoredProceduresCallsImpl()))
     val productApiImpl = ProductApiImpl()
 
     install(Authentication) {
@@ -65,10 +65,10 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("OK", contentType = ContentType.Text.Plain)
         }
 
-        get("$apiRoot/public/v1/alumnos/buscarAlumno") {
+        get("$apiRoot/public/v1/alumnos/{matricula}/login") {
             val request = this.context.request
             val queryParameters: Parameters = request.queryParameters
-            val matricula = queryParameters["matricula"] ?: ""
+            val matricula = call.parameters["matricula"] ?: ""
             val password = queryParameters["password"] ?: ""
 
             val response = alumnoApiImpl.getMatricula(matricula, password)
@@ -76,10 +76,21 @@ fun Application.module(testing: Boolean = false) {
             call.respond(response)
         }
 
-        post("api/cetyskart/public/v1/products") {
-            val postObject = call.receive<AddProductRequest>()
+        route("api/cetyskart/public/v1/products/") {
+            get {
+                call.respondText("Get", contentType = ContentType.Text.Plain)
+            }
+            post {
+                val postObject = call.receive<AddProductRequest>()
 
-            call.respond(productApiImpl.addProduct(postObject))
+                call.respond(productApiImpl.addProduct(postObject))
+            }
+            put {
+                call.respondText("Put", contentType = ContentType.Text.Plain)
+            }
+            delete {
+                call.respondText("Delete", contentType = ContentType.Text.Plain)
+            }
         }
 
     }

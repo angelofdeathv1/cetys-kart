@@ -2,10 +2,9 @@ package mx.cetys.arambula.angel.application.alumnos
 
 import mx.cetys.arambula.angel.application.RequestHandler
 import mx.cetys.arambula.angel.exposed.StoredProceduresCalls
-import mx.cetys.arambula.angel.exposed.StoredProceduresCallsImpl
 
-class GetMatriculaQueryHandler : RequestHandler<GetMatriculaQuery, GetMatriculaQueryResponse> {
-    private val spc: StoredProceduresCalls = StoredProceduresCallsImpl()
+class GetMatriculaQueryHandler(private val spc: StoredProceduresCalls) :
+    RequestHandler<GetMatriculaQuery, GetMatriculaQueryResponse> {
 
     override fun handle(message: GetMatriculaQuery): GetMatriculaQueryResponse {
         require(message.matricula.isNotBlank())

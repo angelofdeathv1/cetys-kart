@@ -36,6 +36,7 @@ dependencies {
     compile("org.jetbrains.exposed:exposed:0.13.1")
     compile("com.microsoft.sqlserver:mssql-jdbc:6.4.0.jre7")
     testCompile("io.ktor:ktor-server-tests:$ktor_version")
+    testCompile("io.mockk:mockk:1.9.3")
 }
 
 tasks {
