@@ -6,6 +6,9 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class CetysKartFacadeImpl : CetysKartFacade {
+    override fun getProduct(id: Int?): List<ProductDTO> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun addProduct(name: String, description: String): ProductDTO {
         val storedProcedureRawSQL = "exec cetyskart.add_product '$name','$description'"

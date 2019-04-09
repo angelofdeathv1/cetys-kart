@@ -3,5 +3,6 @@ package mx.cetys.arambula.angel.exposed
 import mx.cetys.arambula.angel.dto.ProductDTO
 
 interface CetysKartFacade {
-    fun addProduct(name:String, description:String): ProductDTO
+    fun addProduct(name: String, description: String): ProductDTO
+    fun getProduct(id: Int?): List<ProductDTO>
 }

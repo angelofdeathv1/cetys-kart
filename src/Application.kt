@@ -17,9 +17,13 @@ import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import mx.cetys.arambula.angel.application.alumnos.GetMatriculaQueryHandler
+import mx.cetys.arambula.angel.application.products.GetProductQueryHandler
+import mx.cetys.arambula.angel.application.products.SaveProductCommandHandler
+import mx.cetys.arambula.angel.exposed.CetysKartFacadeImpl
 import mx.cetys.arambula.angel.exposed.StoredProceduresCallsImpl
 import mx.cetys.arambula.angel.impl.AddProductRequest
 import mx.cetys.arambula.angel.impl.AlumnoApiImpl
+import mx.cetys.arambula.angel.impl.GetProductRequest
 import mx.cetys.arambula.angel.impl.ProductApiImpl
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -28,8 +32,12 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     val apiRoot = "/api/micampus"
+    val ckf = CetysKartFacadeImpl()
     val alumnoApiImpl = AlumnoApiImpl(GetMatriculaQueryHandler(StoredProceduresCallsImpl()))
-    val productApiImpl = ProductApiImpl()
+    val productApiImpl = ProductApiImpl(
+        SaveProductCommandHandler(ckf),
+        GetProductQueryHandler(ckf)
+    )
 
     install(Authentication) {
     }
@@ -78,7 +86,8 @@ fun Application.module(testing: Boolean = false) {
 
         route("api/cetyskart/public/v1/products/") {
             get {
-                call.respondText("Get", contentType = ContentType.Text.Plain)
+                val id: Int? = 0//call.parameters["id"]
+                call.respond(productApiImpl.getProduct(GetProductRequest(id)))
             }
             post {
                 val postObject = call.receive<AddProductRequest>()

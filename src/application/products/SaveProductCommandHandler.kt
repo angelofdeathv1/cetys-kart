@@ -2,10 +2,10 @@ package mx.cetys.arambula.angel.application.products
 
 import mx.cetys.arambula.angel.application.RequestHandler
 import mx.cetys.arambula.angel.exposed.CetysKartFacade
-import mx.cetys.arambula.angel.exposed.CetysKartFacadeImpl
 
-class SaveProductCommandHandler : RequestHandler<SaveProductCommand, SaveProductCommandResponse> {
-    private val ckf: CetysKartFacade = CetysKartFacadeImpl()
+class SaveProductCommandHandler(private val ckf: CetysKartFacade) :
+    RequestHandler<SaveProductCommand, SaveProductCommandResponse> {
+
     override fun handle(message: SaveProductCommand): SaveProductCommandResponse {
         require(message.name.isNotBlank())
 
