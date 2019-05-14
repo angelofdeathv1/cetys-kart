@@ -23,7 +23,6 @@ import mx.cetys.arambula.angel.exposed.CetysKartFacadeImpl
 import mx.cetys.arambula.angel.exposed.StoredProceduresCallsImpl
 import mx.cetys.arambula.angel.impl.AddProductRequest
 import mx.cetys.arambula.angel.impl.AlumnoApiImpl
-import mx.cetys.arambula.angel.impl.GetProductRequest
 import mx.cetys.arambula.angel.impl.ProductApiImpl
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -56,8 +55,8 @@ fun Application.module(testing: Boolean = false) {
         header(HttpHeaders.Authorization)
         header("MyCustomHeader")
         allowCredentials = true
-        //anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
-        host("127.0.0.1")
+        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+        //host("127.0.0.1")
     }
 
     routing {
@@ -86,12 +85,13 @@ fun Application.module(testing: Boolean = false) {
 
         route("api/cetyskart/public/v1/products/") {
             get {
-                val id: Int? = 0//call.parameters["id"]
-                call.respond(productApiImpl.getProduct(GetProductRequest(id)))
+                //                val sId: String = call.parameters["id"] ?: ""
+//                val id: Int = sId.toInt()
+//                call.respond(productApiImpl.getProduct(GetProductRequest(id)))
+                call.respondText("Get", contentType = ContentType.Text.Plain)
             }
             post {
                 val postObject = call.receive<AddProductRequest>()
-
                 call.respond(productApiImpl.addProduct(postObject))
             }
             put {

@@ -3,6 +3,7 @@ package mx.cetys.arambula.angel
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,6 +25,18 @@ class ApplicationTest {
             handleRequest(HttpMethod.Get, "/api/micampus/public/v1/healthcheck").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
 
+            }
+        }
+    }
+
+    @Test
+    fun testPost() {
+        withTestApplication({ module(testing = true) }) {
+            with(handleRequest(HttpMethod.Post, "/api/cetyskart/public/v1/products/") {
+                addHeader("content-type", "application/json")
+                setBody("{\"name\":\"product_name\",\"description\":\"product_description\"}")
+            }) {
+                assertEquals(HttpStatusCode.OK, response.status())
             }
         }
     }
